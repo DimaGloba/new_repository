@@ -16,6 +16,7 @@ class Users:
                 return False
             else:
                 users[username] = password
+                print(users)
                 return True
         except KeyError:
             return False
@@ -26,9 +27,9 @@ class Users:
     def get_user(self, username, password):
         try:
             if users[username] == password:
-                return "Пользователь с таким именем уже зарегестрирован"
+                return  True
             else:
-                return "Пользователь успешно создан"
+                return False
         except KeyError:
             return False
 
@@ -43,6 +44,8 @@ def login():
         password = request.form.get('password')
         if user.get_user(username, password):
             return render_template('user_window.html', username=username)
+        else:
+            return "Неверный пароль"
 
     return render_template('login.html')
 
@@ -57,6 +60,10 @@ def regis():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        if user.add_user(username, password):
+            return "Пользователь успешно создан"
+        else:
+            return "Пользователь с таким именем уже зарегестрирован"
         render_template('login.html')
     return render_template('regis.html')
 
